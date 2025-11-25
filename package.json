@@ -1,0 +1,27 @@
+{
+  "name": "via-structurae",
+  "version": "1.0.0",
+  "description": "Formação completa em Arquitetura TypeScript, DevOps e Autoridade Profissional.",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/week01/project/index.ts",
+    "build": "tsc -p .",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "typescript",
+    "architecture",
+    "devops",
+    "backend",
+    "education"
+  ],
+  "author": "Euclides Paim",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.0"
+  }
+}
