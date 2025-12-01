@@ -1,18 +1,18 @@
-# Via Structurae — Week02: Organização em Camadas e Estrutura de Projeto
+
+# Via Structurae — Week02 (Expandida): Arquitetura em Camadas + Laboratório Avançado (Exercises)
 
 ## 🎯 Objetivo da Semana 2
-A Week02 marca a transição do “TypeScript básico” para a construção de **um mini-projeto modular**, com separação de responsabilidades entre camadas.  
-O foco aqui não é Clean Architecture completa — isso virá nas próximas semanas —  
-mas sim **entender os papéis de Domain, Infra e App** dentro de um projeto organizado.
+A Week02 solidifica a transição entre o TypeScript básico (Week01) e a organização arquitetural moderna.  
+Ela é dividida em duas partes:
 
-Essa semana representa o primeiro contato com arquitetura real:  
-**arrumar a casa antes de crescer o sistema.**
+- **project/** → versão oficial da semana, simples, estável e didática  
+- **exercises/** → laboratório avançado com DI, interfaces, repositórios alternativos e testes estruturais  
+
+Essa separação garante uma evolução limpa e progressiva.
 
 ---
 
-# 🧱 **1. Estrutura de Pastas da Week02**
-
-A Week02 segue esta estrutura fixa:
+# 🧱 1. Estrutura Completa da Week02
 
 ```
 week02/
@@ -24,23 +24,19 @@ week02/
    │     ├── infra/
    │     └── index.ts
    └── exercises/
+         ├── app/
+         ├── domain/
+         ├── infra/
+         └── index.ts
 ```
-
-### ✔ `project/`
-Contém **o código oficial da semana**, estável, usado como base para a evolução futura.
-
-### ✔ `exercises/`
-Ficará disponível para testes, desafios e melhorias que **não alteram o core**.
 
 ---
 
-# 🧩 **2. As Camadas da Week02**
+# 📌 2. Week02/project — Arquitetura Base (Snapshot Oficial)
 
-## **2.1 Domain — Regras e Modelos**
-Aqui definimos as entidades da aplicação.  
-Na Week02, o domínio tem apenas uma entidade:
+## 2.1 Camada Domain
+Define entidades e tipos centrais da aplicação.
 
-### `domain/catalog/product.ts`
 ```ts
 export type Category = "tech" | "food" | "office";
 
@@ -52,173 +48,186 @@ export interface Product {
 }
 ```
 
-O domínio **não sabe onde os dados são guardados**, nem como.  
-Ele apenas define **o que é um produto**.
+## 2.2 Camada Infra
+Simples fonte de dados:
 
----
-
-## **2.2 Infra — Armazenamento de Dados**
-Na Week02, infraestrutura é só um **array em memória**, simples:
-
-### `infra/product.data.ts`
 ```ts
-import { Product } from "../domain/catalog/product";
-
 export const products: Product[] = [];
 ```
 
-O objetivo é criar um local único e centralizado para guardar dados,  
-separando isso da lógica dos use cases.
+## 2.3 Camada App (UseCases)
+Três casos de uso essenciais:
+
+- create-product
+- list-products
+- filter-products
+
+Todos acessam diretamente `products[]`.
+
+## 2.4 index.ts (Orquestrador)
+
+Fluxo simples:
+
+```
+index → usecases → infra → dados
+```
 
 ---
 
-## **2.3 App — Casos de Uso**
-Casos de uso representam **ações da aplicação**.
+# 🧩 3. Conceitos Fundamentais da Week02/project
 
-São três:
+### ✔ Separação de responsabilidades  
+Cada camada tem um papel claro.
 
-### 1) Criar produto
+### ✔ Domínio isolado  
+Define o “o quê”, não o “como”.
+
+### ✔ UseCases como orquestradores  
+Contêm a lógica da interação.
+
+### ✔ Infra simples  
+Fonte de dados única, sem complexidade.
+
+### ✔ Execução linear  
+Ideal para ensino e compreensão inicial.
+
+---
+
+# 🧪 4. Week02/exercises — Arquitetura Avançada
+
+Agora entra a parte que prepara para a Week03.
+
+Aqui introduzimos:
+
+- Interfaces  
+- Repositórios avançados  
+- Mocking  
+- Dependency Injection  
+- Validação mínima  
+- Separação total de camadas  
+- Fluxo desacoplado e testável  
+
+---
+
+# 🧩 5. Exercício 1 — ProductRepository (Interface)
+
+Caminho:
+
+```
+week02/exercises/domain/catalog/product.repository.ts
+```
+
+### 📄 Interface completa
 ```ts
-export class CreateProductUseCase {
-  execute(name: string, price: number, category: Category): Product {
-    const product = { id: nextId++, name, price, category };
-    products.push(product);
-    return product;
-  }
+export interface ProductRepository {
+  create(product: Omit<Product, "id">): Product;
+  findAll(): Product[];
+  findByCategory(category: Product["category"]): Product[];
 }
 ```
 
-### 2) Listar produtos
+### 📌 Conceitos importantes
+- Contrato fixo  
+- Polimorfismo por estrutura  
+- UseCases deixam de conhecer implementações concretas  
+
+---
+
+# 🧩 6. Exercício 2 — ProductMemoryRepository (Avançado)
+
+Caminho:
+
+```
+week02/exercises/infra/catalog/product.memory.repository.ts
+```
+
+Repositório especializado com controle de ID e armazenamento isolado.
+
+---
+
+# 🧩 7. Exercício 3 — UseCases Avançados com DI
+
+Caminho:
+
+```
+week02/exercises/app/catalog/*.usecase.ts
+```
+
+Agora os casos de uso recebem a dependência via construtor:
+
 ```ts
-export class ListProductsUseCase {
-  execute(): Product[] {
-    return products;
-  }
-}
+constructor(private repo: ProductRepository) {}
 ```
 
-### 3) Filtrar produtos por categoria
-```ts
-export class FilterProductsUseCase {
-  execute(category: Category): Product[] {
-    return products.filter(p => p.category === category);
-  }
-}
-```
-
-**Características dessa fase:**
-- Sem interfaces.
-- Sem injeção de dependências.
-- Sem camada de serviços.
-- Foco na organização básica e no fluxo de dados.
-
-A evolução vem nas semanas posteriores.
+Isso habilita testes, mocks e repositórios alternativos.
 
 ---
 
-# 🧩 **3. index.ts — O Cérebro da Execução**
+# 🧩 8. Exercício 4 — index.ts Avançado (Integração)
 
-### `project/index.ts`
-```ts
-import { CreateProductUseCase } from "./app/catalog/create-product.usecase";
-import { ListProductsUseCase } from "./app/catalog/list-products.usecase";
-import { FilterProductsUseCase } from "./app/catalog/filter-products.usecase";
+Caminho:
 
-const create = new CreateProductUseCase();
-const list = new ListProductsUseCase();
-const filter = new FilterProductsUseCase();
-
-create.execute("Notebook Lenovo", 4500, "tech");
-create.execute("Maçã Gala", 3.5, "food");
-create.execute("Grampeador", 12.9, "office");
-
-console.log("Todos os produtos:");
-console.log(list.execute());
-
-console.log("\nSomente TECH:");
-console.log(filter.execute("tech"));
+```
+week02/exercises/index.ts
 ```
 
-## ✔ O index é responsável por:
-- Instanciar os casos de uso  
-- Inserir dados  
-- Coordenar a execução  
-- Exibir resultados  
-
-Essa separação mantém os arquivos limpos e cada parte com uma única responsabilidade.
+Integra:
+- um repositório concreto  
+- todos os usecases  
+- imprime resultados para teste  
 
 ---
 
-# 🧭 **4. Fluxo Completo da Aplicação**
+# 🧩 9. Exercício 5 — ProductMockRepository (Testes)
 
-1. **index.ts** chama `create.execute()`  
-2. UseCase cria o produto e salva em `products[]`  
-3. `list.execute()` retorna todos  
-4. `filter.execute()` retorna filtrados  
-5. index.ts apenas imprime  
-
-Fluxo resumido:
+Caminho:
 
 ```
-index.ts → usecases → infra → dados
+week02/exercises/infra/catalog/product.mock.repository.ts
 ```
+
+Mock usado para validar o comportamento dos usecases.
 
 ---
 
-# 📚 **5. Conceitos Aprendidos na Week02**
+# 🧠 10. Conceitos Teóricos Introduzidos nos Exercises
 
-## ✔ 1. Domínio separado da infraestrutura  
-Modelos não conhecem a origem dos dados.
-
-## ✔ 2. Infraestrutura única para armazenamento  
-Mesmo em um array simples, há uma separação clara.
-
-## ✔ 3. Casos de uso controlam a lógica da aplicação  
-Eles são o ponto de entrada da regra do sistema.
-
-## ✔ 4. Fluxo de dados encadeado  
-Index → UseCases → Infra → Dados
-
-## ✔ 5. Organização modular  
-Um diretório por camada, fácil de navegar.
+- Injeção de Dependências  
+- Repository Pattern  
+- Polimorfismo via Interface  
+- Mocking  
+- Testabilidade  
+- Camadas independentes  
 
 ---
 
-# 🧠 **6. Por Que Isso Importa?**
+# 🧭 11. project × exercises — Comparação
 
-Porque na Week03 vamos evoluir isso para:
+| Aspecto | project (oficial) | exercises (avançado) |
+|--------|-------------------|-----------------------|
+| Acesso a dados | direto | interface |
+| Persistência | array simples | repos isolados |
+| UseCases | simples | com DI |
+| Testabilidade | baixa | alta |
+| Evolução | inicial | pronta para Week03 |
 
-- generics aplicados a usecases  
+---
+
+# 🚀 12. O que Week02 prepara para a Week03
+
+Na próxima semana vamos entrar em:
+- generics avançados  
 - type guards  
-- narrowing avançado  
-- repository pattern  
-- injeção de dependência  
+- narrowing  
+- DTOs  
+- exceções customizadas  
 - repositórios genéricos  
-- exceções  
-- DTOs  
-- testes automatizados  
-- services  
-- clean architecture de verdade
-
-E nada disso faz sentido se tu não tiver base sólida da Week02.
-
-A Week02 é **o alicerce da arquitetura**.
+- serviços de domínio  
+- testes unitários com Jest  
 
 ---
 
-# 📝 **7. O Que Vem na Week03**
-(um preview direto)
-
-- interface de repositório  
-- repositório avançado  
-- mocks  
-- DTOs  
-- services  
-- generics  
-- exceptions  
-- fluxo mais robusto  
-
----
-
-# 🎉 **Week02 concluída!**
-Projeto limpo, estável e pronto para evoluir.
+# 🎉 Week02 concluída!
+project = snapshot didático  
+exercises = laboratório avançado  
+Pronto para a Week03.

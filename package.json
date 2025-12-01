@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev:w1": "ts-node-dev --respawn --transpile-only src/week01/project/index.ts",
-    "dev:w2": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/week02/index.ts",
+    "dev:w2": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/week02/project/index.ts",
     "build": "tsc -p .",
     "start": "node dist/index.js",
     "clean": "rm -rf dist"
