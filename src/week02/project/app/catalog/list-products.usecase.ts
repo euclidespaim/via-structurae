@@ -1,4 +1,4 @@
-import { ProductRepository } from "@week02/domain/catalog/product.repository";
+import { ProductRepository } from "@week02/project/domain/catalog/product.repository";
 
 export class ListProductsUseCase {
   constructor(private repo: ProductRepository) {}

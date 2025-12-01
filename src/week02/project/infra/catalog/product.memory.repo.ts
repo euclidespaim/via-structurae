@@ -1,5 +1,5 @@
-import { Product } from "@week02/domain/catalog/product";
-import { ProductRepository } from "@week02/domain/catalog/product.repository";
+import { Product } from "@week02/project/domain/catalog/product";
+import { ProductRepository } from "@week02/project/domain/catalog/product.repository";
 
 export class ProductMemoryRepository implements ProductRepository {
   private products: Product[] = [];

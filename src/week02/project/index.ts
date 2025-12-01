@@ -1,8 +1,8 @@
-import { ProductMemoryRepository } from "@week02/infra/catalog/product.memory.repo";
+import { ProductMemoryRepository } from "@week02/project/infra/catalog/product.memory.repo";
 
-import { CreateProductUseCase } from "@week02/app/catalog/create-product.usecase";
-import { ListProductsUseCase } from "@week02/app/catalog/list-products.usecase";
-import { FilterProductsUseCase } from "@week02/app/catalog/filter-products.usecase";
+import { CreateProductUseCase } from "@week02/project/app/catalog/create-product.usecase";
+import { ListProductsUseCase } from "@week02/project/app/catalog/list-products.usecase";
+import { FilterProductsUseCase } from "@week02/project/app/catalog/filter-products.usecase";
 
 const repo = new ProductMemoryRepository();
 
