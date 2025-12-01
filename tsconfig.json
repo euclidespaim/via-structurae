@@ -18,11 +18,7 @@
 
     "baseUrl": "./",
     "paths": {
-      "@domain/*": ["src/domain/*"],
-      "@app/*": ["src/app/*"],
-      "@infra/*": ["src/infra/*"],
-      "@shared/*": ["src/shared/*"],
-      "@week01/*": ["src/week01/*"]
+      "@week02/*": ["src/week02/*"]
     }
   },
 
