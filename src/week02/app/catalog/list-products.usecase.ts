@@ -1,7 +1,9 @@
-import { productRepository } from "@week02/infra/catalog/product.memory.repo";
+import { ProductRepository } from "@week02/domain/catalog/product.repository";
 
 export class ListProductsUseCase {
+  constructor(private repo: ProductRepository) {}
+
   execute() {
-    return productRepository.list();
+    return this.repo.findAll();
   }
 }

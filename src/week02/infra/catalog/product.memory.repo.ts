@@ -1,28 +1,25 @@
 import { Product } from "@week02/domain/catalog/product";
+import { ProductRepository } from "@week02/domain/catalog/product.repository";
 
-class ProductMemoryRepository {
+export class ProductMemoryRepository implements ProductRepository {
   private products: Product[] = [];
   private nextId = 1;
 
-  create(name: string, price: number, category: Product["category"]): Product {
-    const product: Product = {
+  create(product: Omit<Product, "id">): Product {
+    const newProduct: Product = {
       id: this.nextId++,
-      name,
-      price,
-      category
+      ...product
     };
 
-    this.products.push(product);
-    return product;
+    this.products.push(newProduct);
+    return newProduct;
   }
 
-  list(): Product[] {
+  findAll(): Product[] {
     return this.products;
   }
 
-  filterByCategory(category: Product["category"]): Product[] {
+  findByCategory(category: Product["category"]): Product[] {
     return this.products.filter((p) => p.category === category);
   }
 }
-
-export const productRepository = new ProductMemoryRepository();
