@@ -160,4 +160,4 @@
 
 ---
 
-Feito para ser **executável, sólido e progressivo**.
+Feito para ser **executável, sólido e progressivo**...
