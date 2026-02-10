@@ -130,6 +130,7 @@ Este projeto está sob a licença **MIT** — livre para uso, modificação e ap
 
 ---
 ---
+---
 
 ## ⭐ Apoie o Projeto
 
