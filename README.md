@@ -129,8 +129,6 @@ Educador, desenvolvedor e pesquisador apaixonado por arquitetura, sistemas distr
 Este projeto está sob a licença **MIT** — livre para uso, modificação e aprendizado.
 
 ---
----
----
 
 ## ⭐ Apoie o Projeto
 
